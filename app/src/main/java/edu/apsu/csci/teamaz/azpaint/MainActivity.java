@@ -3,7 +3,7 @@ package edu.apsu.csci.teamaz.azpaint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-
+//Test
 
 public class MainActivity extends AppCompatActivity {
 
