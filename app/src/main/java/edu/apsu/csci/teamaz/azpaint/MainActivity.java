@@ -1,7 +1,11 @@
 package edu.apsu.csci.teamaz.azpaint;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +21,10 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ImageView colorchart;
+    private TextView colorDisplay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,42 +57,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void DialogBox(int itemId){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+       /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-        switch(itemId) {
-            case R.id.color:
-                builder.setTitle("Color");
-                builder.setView(R.layout.dialog_color);
-                View colorchart = (View) findViewById(R.id.colorchart);
-                colorchart.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        
-                        return false;
-                    }
-                });
-                break;
-            case R.id.thickness:
-                builder.setTitle("Thickness");
-
-                break;
-            default:
-                Log.i("=============", "An error was encountered!");
-
-        }
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+        builder.setTitle("Color");
+        builder.setView(R.layout.dialog_color);
         builder.show();
+        final AlertDialog alertDialog = builder.create();
+        */
+
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog_color);
+
+        dialog.show();
+
+        colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
+        Log.i("===================", "colorchart:" + colorchart);
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
+        Log.i("===================", "bitmap:" + bitmapDrawable);
+
+        final Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        colorchart.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int x = (int)motionEvent.getX();
+                int y = (int)motionEvent.getY();
+                int pixel = bitmap.getPixel(x,y);
+
+                String hexVal = Integer.toHexString(pixel);
+                colorDisplay = (TextView) dialog.findViewById(R.id.colorDisplay);
+                int red = Color.red(pixel);
+                int blue = Color.blue(pixel);
+                int green = Color.green(pixel);
+
+                Log.i("===============", "Color: " + Color.argb(255, red, green, blue));
+
+                colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
+
+                return false;
+            }
+        });
+
+
     }
 
 }
