@@ -15,7 +15,8 @@
         android:layout_width="322dp"
         android:layout_height="wrap_content"
         class="edu.apsu.csci.teamaz.azpaint.DrawingSurface"
-        android:id="@+id/view" />
+        android:id="@+id/canvas"
+        android:layout_marginRight="10dp" />
 
     <LinearLayout
         android:orientation="vertical"

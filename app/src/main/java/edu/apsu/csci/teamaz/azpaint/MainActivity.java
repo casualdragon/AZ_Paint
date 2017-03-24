@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
+        surface.setOnTouchListener(new CanvasTouchListener());
 
         ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
         colorChart.setOnClickListener(new View.OnClickListener() {
@@ -109,5 +114,48 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    //Records points and sends them to
+    private class CanvasTouchListener implements View.OnTouchListener{
+        private Point startPoint;
+        private Point endPoint;
+        DrawingSurface surface;
+
+        public CanvasTouchListener(){
+            super();
+            surface = (DrawingSurface) findViewById(R.id.canvas);
+        }
+
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            Log.i("=======", "Touch Registered");
+
+            //Gets starting Point
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                startPoint = new Point((int)motionEvent.getX(),(int)motionEvent.getY());
+                Log.i("=======", "Touch DOWN");
+                return true;
+            }
+            //Gets ending Point
+            else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+                endPoint = new Point((int)motionEvent.getX(),(int)motionEvent.getY());
+                surface.add(startPoint, endPoint);
+                Log.i("=======", "Touch UP");
+                return true;
+
+            }
+            //Otherwise it updates it with the current position
+            else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+                surface.removePrevious();
+                endPoint = new Point((int)motionEvent.getX(),(int)motionEvent.getY());
+                surface.add(startPoint, endPoint);
+                surface.invalidate();
+                return true;
+            }
+            return false;
+        }
+    }
+
 
 }
