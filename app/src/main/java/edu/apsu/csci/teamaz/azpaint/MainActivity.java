@@ -1,30 +1,19 @@
 package edu.apsu.csci.teamaz.azpaint;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 //Test
 
@@ -39,12 +28,19 @@ public class MainActivity extends AppCompatActivity {
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogBox();
+                DialogBoxColor();
+            }
+        });
+        ImageView lineWeight = (ImageView) findViewById(R.id.lineWeight);
+        lineWeight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogBoxLineWeight();
             }
         });
     }
 
-    private void DialogBox(){
+    private void DialogBoxColor(){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_color);
 
@@ -108,6 +104,52 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+    private void DialogBoxLineWeight(){
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog_line_weight);
+
+        dialog.show();
+
+        Button confirm = (Button) dialog.findViewById(R.id.confirm_button_line);
+        Button cancel = (Button) dialog.findViewById(R.id.cancel_button_line);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Save the color and change color of the object
+            }
+        });
+
+        SeekBar seekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
+        seekBar.setMax(250);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                TextView tv = (TextView) dialog.findViewById(R.id.textview_line);
+                int val = Integer.parseInt(tv.getText().toString());
+                if(i == 0){
+                    val = 1;
+                }
+                tv.setText(Integer.toString(val));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
 }
