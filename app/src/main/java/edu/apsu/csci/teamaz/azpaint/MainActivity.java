@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
+        final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
 //        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
         final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.colorchart);
 //        final Bitmap bitmap = bitmapDrawable.getBitmap();
@@ -77,10 +77,18 @@ public class MainActivity extends AppCompatActivity {
                 if(MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
                     int x = (int) motionEvent.getX();
                     int y = (int) motionEvent.getY();
-                    int pixel = bitmap.getPixel(x, y);
+
                     Log.i("============", "x: " + x + " y: " + y);
 
                     TextView colorDisplay = (TextView) dialog.findViewById(R.id.colorDisplay);
+
+                    int convertedX = (int)((double) x / colorchart.getWidth() * bitmap.getWidth());
+                    int convertedY = (int)((double) y / colorchart.getHeight() * bitmap.getHeight());
+
+                    Log.i("============", "cx: " + convertedX + " cy: " + convertedY);
+
+                    int pixel = bitmap.getPixel(convertedX, convertedY);
+
                     int red = Color.red(pixel);
                     int blue = Color.blue(pixel);
                     int green = Color.green(pixel);
