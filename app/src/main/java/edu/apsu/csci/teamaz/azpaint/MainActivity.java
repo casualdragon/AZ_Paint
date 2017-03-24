@@ -4,17 +4,23 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,79 +28,71 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView colorchart;
-    private TextView colorDisplay;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
+        colorChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogBox();
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menudrawingsurface, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.color:
-                DialogBox(item.getItemId());
-                break;
-            case R.id.line:
-                break;
-            case R.id.rectangle:
-                break;
-            case R.id.thickness:
-                DialogBox(item.getItemId());
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void DialogBox(int itemId){
-       /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-        builder.setTitle("Color");
-        builder.setView(R.layout.dialog_color);
-        builder.show();
-        final AlertDialog alertDialog = builder.create();
-        */
-
+    private void DialogBox(){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_color);
 
         dialog.show();
 
-        colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
-        Log.i("===================", "colorchart:" + colorchart);
+        Button confirm = (Button) dialog.findViewById(R.id.confirm_button_color);
+        Button cancel = (Button) dialog.findViewById(R.id.cancel_button_color);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Save the color and change color of the object
+            }
+        });
 
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
-        Log.i("===================", "bitmap:" + bitmapDrawable);
-
-        final Bitmap bitmap = bitmapDrawable.getBitmap();
+        ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
+//        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
+        final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.colorchart);
+//        final Bitmap bitmap = bitmapDrawable.getBitmap();
 
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                int x = (int)motionEvent.getX();
-                int y = (int)motionEvent.getY();
-                int pixel = bitmap.getPixel(x,y);
 
-                String hexVal = Integer.toHexString(pixel);
-                colorDisplay = (TextView) dialog.findViewById(R.id.colorDisplay);
-                int red = Color.red(pixel);
-                int blue = Color.blue(pixel);
-                int green = Color.green(pixel);
+                if(MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
+                    int x = (int) motionEvent.getX();
+                    int y = (int) motionEvent.getY();
+                    int pixel = bitmap.getPixel(x, y);
+                    Log.i("============", "x: " + x + " y: " + y);
 
-                Log.i("===============", "Color: " + Color.argb(255, red, green, blue));
+                    TextView colorDisplay = (TextView) dialog.findViewById(R.id.colorDisplay);
+                    int red = Color.red(pixel);
+                    int blue = Color.blue(pixel);
+                    int green = Color.green(pixel);
 
-                colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
+                    EditText redEditText = (EditText) dialog.findViewById(R.id.red);
+                    EditText greenEditText = (EditText) dialog.findViewById(R.id.green);
+                    EditText blueEditText = (EditText) dialog.findViewById(R.id.blue);
 
+                    redEditText.setText(Integer.toString(red));
+                    blueEditText.setText(Integer.toString(blue));
+                    greenEditText.setText(Integer.toString(green));
+
+                    colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
+                }
                 return false;
             }
         });
