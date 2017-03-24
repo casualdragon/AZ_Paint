@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,6 +8,51 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.apsu.csci.teamaz.azpaint.MainActivity">
+    tools:context="edu.apsu.csci.teamaz.azpaint.MainActivity"
+    android:weightSum="1">
 
-</RelativeLayout>
+    <view
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        class="edu.apsu.csci.teamaz.azpaint.DrawingSurface"
+        android:id="@+id/view" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/line"
+            android:layout_weight="1"
+            android:src="@drawable/pencil3"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rectangle"
+            android:layout_weight="1.49"
+            android:src="@drawable/rectangle"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/colorChart"
+            android:layout_weight="1"
+            android:src="@drawable/coloricon"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lineWeight"
+            android:layout_weight="1"
+            android:src="@drawable/light_weight"
+            android:clickable="true" />
+
+    </LinearLayout>
+</LinearLayout>
