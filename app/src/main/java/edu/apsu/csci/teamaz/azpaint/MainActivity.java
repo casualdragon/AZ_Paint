@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
-//        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
         final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.colorchart);
+
 //        final Bitmap bitmap = bitmapDrawable.getBitmap();
         final CustomPaint customPaint = new CustomPaint();
         colorchart.setOnTouchListener(new View.OnTouchListener() {
