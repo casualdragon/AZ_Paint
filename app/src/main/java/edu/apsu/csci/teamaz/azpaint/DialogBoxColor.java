@@ -18,8 +18,8 @@ import android.widget.TextView;
  */
 
 public class DialogBoxColor {
-    public DialogBoxColor(Context context, final DrawingSurface surface){
-        final int r;
+    public DialogBoxColor(final DrawingSurface surface){
+        Context context = surface.getContext();
 
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_color);
@@ -37,7 +37,9 @@ public class DialogBoxColor {
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
         final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.colorchart);
-        final ColorP colorP = new ColorP();
+
+//        final Bitmap bitmap = bitmapDrawable.getBitmap();
+        final CustomPaint customPaint = new CustomPaint();
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -68,7 +70,7 @@ public class DialogBoxColor {
                     redEditText.setText(Integer.toString(red));
                     blueEditText.setText(Integer.toString(blue));
                     greenEditText.setText(Integer.toString(green));
-                    colorP.setColor(red, blue, green);
+                    customPaint.setColor(red, blue, green);
 
                     colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
                 }
@@ -81,37 +83,10 @@ public class DialogBoxColor {
             public void onClick(View view) {
                 Log.i("=================", "In onclick for confirm");
                 //Save the color and change color of the object
-                surface.setPaintColor(colorP.getRed(), colorP.getBlue(), colorP.getGreen());
+                surface.setPaintColor(customPaint.getRed(), customPaint.getBlue(), customPaint.getGreen());
                 dialog.cancel();
             }
         });
 
-    }
-    private class ColorP{
-        private int red;
-        private int green;
-        private int blue;
-        public  ColorP(){
-            red= 0;
-            green = 0;
-            blue = 0;
-        }
-        public void setColor(int red, int green, int blue){
-            this.red= red;
-            this.green = green;
-            this.blue = blue;
-        }
-
-        public int getRed() {
-            return red;
-        }
-
-        public int getGreen() {
-            return green;
-        }
-
-        public int getBlue() {
-            return blue;
-        }
     }
 }
