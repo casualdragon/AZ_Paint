@@ -1,24 +1,13 @@
 package edu.apsu.csci.teamaz.azpaint;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 //Test
 
@@ -52,13 +39,12 @@ public class MainActivity extends AppCompatActivity {
         lineWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogBoxLineWeight();
+                DialogBoxLineWeight(surface);
             }
         });
     }
 
     private void DialogBoxColor(final DrawingSurface surface){
-        final int r;
 
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_color);
@@ -76,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
         final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.colorchart);
-        final ColorP colorP = new ColorP();
+
+//        final Bitmap bitmap = bitmapDrawable.getBitmap();
+        final CustomPaint customPaint = new CustomPaint();
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -107,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     redEditText.setText(Integer.toString(red));
                     blueEditText.setText(Integer.toString(blue));
                     greenEditText.setText(Integer.toString(green));
-                    colorP.setColor(red, blue, green);
+                    customPaint.setColor(red, blue, green);
 
                     colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
                 }
@@ -120,25 +108,30 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i("=================", "In onclick for confirm");
                 //Save the color and change color of the object
-                surface.setPaintColor(colorP.getRed(), colorP.getBlue(), colorP.getGreen());
+                surface.setPaintColor(customPaint.getRed(), customPaint.getBlue(), customPaint.getGreen());
                 dialog.cancel();
             }
         });
 
     }
-    private class ColorP{
+    private class CustomPaint {
         private int red;
         private int green;
         private int blue;
-        public  ColorP(){
+        private int lineWeight;
+        public CustomPaint(){
             red= 0;
             green = 0;
             blue = 0;
+            lineWeight = 1;
         }
         public void setColor(int red, int green, int blue){
             this.red= red;
             this.green = green;
             this.blue = blue;
+        }
+        public void setLineWeight(int lineWeight){
+            this.lineWeight = lineWeight;
         }
 
         public int getRed() {
@@ -151,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
         public int getBlue() {
             return blue;
+        }
+        public int getLineWeight(){
+            return lineWeight;
         }
     }
 
@@ -195,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-    private void DialogBoxLineWeight(){
+    private void DialogBoxLineWeight(final DrawingSurface surface){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_line_weight);
 
@@ -210,13 +206,7 @@ public class MainActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Save the color and change color of the object
-            }
-        });
-
+        final CustomPaint customPaint = new CustomPaint();
         SeekBar seekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
         seekBar.setMax(250);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -227,16 +217,20 @@ public class MainActivity extends AppCompatActivity {
                     i = 1;
                 }
                 tv.setText(Integer.toString(i));
+                customPaint.setLineWeight(i);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
+            public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Save the line weight and change stroke of the object
+                surface.setLineWeight(customPaint.getLineWeight());
+                dialog.cancel();
             }
         });
     }

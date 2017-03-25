@@ -92,7 +92,7 @@ public class DrawingSurface extends View{
         paint.setARGB(255, red, green, blue);
     }
     public void setLineWeight(int weight){
-
+        paint.setStrokeWidth(weight);
     }
 
 }
