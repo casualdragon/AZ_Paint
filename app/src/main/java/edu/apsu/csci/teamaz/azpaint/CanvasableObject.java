@@ -9,7 +9,7 @@ import android.graphics.Point;
 
 //A class for the different types of objects that can be drawn
 public class CanvasableObject {
-    public enum ObjectType {LINE, RECTANGLE};
+    public enum ObjectType {FREE, LINE, RECTANGLE};
 
     private SerializablePaint paint;
     private Point startPoint;

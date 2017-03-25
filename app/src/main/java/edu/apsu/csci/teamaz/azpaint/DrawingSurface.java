@@ -38,7 +38,7 @@ public class DrawingSurface extends View{
     //Set up for canvas
     private void setup(AttributeSet attrs){
         objects = new ArrayList<>();
-        objectType = CanvasableObject.ObjectType.RECTANGLE;
+        objectType = CanvasableObject.ObjectType.FREE;
         paint = new SerializablePaint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -53,6 +53,7 @@ public class DrawingSurface extends View{
         //Draws each opject based on what type it is.
         for(CanvasableObject object : objects){
             switch (object.getType()){
+                case FREE:
                 case LINE:
                     canvas.drawLine(
                             object.getX1(),
@@ -96,5 +97,18 @@ public class DrawingSurface extends View{
     public SerializablePaint getPaint(){
         return paint;
     }
+
+    public CanvasableObject.ObjectType getObjectType(){
+        return objectType;
+    }
+
+    public void setObjectType(CanvasableObject.ObjectType objectType){
+        this.objectType = objectType;
+    }
+
+    public void clearSurface(){
+        objects.clear();
+    }
+
 
 }

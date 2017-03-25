@@ -22,10 +22,12 @@ public class DialogBoxColor {
 
     public DialogBoxColor(final DrawingSurface surface){
         paint = surface.getPaint();
+
         Context context = surface.getContext();
 
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_color);
+        dialog.findViewById(R.id.colorDisplay).setBackgroundColor(paint.getColor());
 
         dialog.show();
 

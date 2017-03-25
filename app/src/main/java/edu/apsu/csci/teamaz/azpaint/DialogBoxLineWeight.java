@@ -27,6 +27,12 @@ public class DialogBoxLineWeight {
         Button cancel = (Button) dialog.findViewById(R.id.cancel_button_line);
 
         SeekBar seekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
+
+        //Sets previous value
+        int strokeWidth = (int)paint.getStrokeWidth();
+        ((TextView) dialog.findViewById(R.id.textview_line)).setText(Integer.toString(strokeWidth));
+        seekBar.setProgress(strokeWidth);
+
         seekBar.setMax(250);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
