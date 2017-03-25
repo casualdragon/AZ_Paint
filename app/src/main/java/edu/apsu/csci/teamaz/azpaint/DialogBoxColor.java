@@ -18,7 +18,10 @@ import android.widget.TextView;
  */
 
 public class DialogBoxColor {
+    private SerializablePaint paint;
+
     public DialogBoxColor(final DrawingSurface surface){
+        paint = surface.getPaint();
         Context context = surface.getContext();
 
         final Dialog dialog = new Dialog(context);
@@ -28,18 +31,12 @@ public class DialogBoxColor {
 
         final Button confirm = (Button) dialog.findViewById(R.id.confirm_button_color);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_button_color);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
         final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.colorchart);
 
-//        final Bitmap bitmap = bitmapDrawable.getBitmap();
-        final CustomPaint customPaint = new CustomPaint();
+
+
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -70,7 +67,7 @@ public class DialogBoxColor {
                     redEditText.setText(Integer.toString(red));
                     blueEditText.setText(Integer.toString(blue));
                     greenEditText.setText(Integer.toString(green));
-                    customPaint.setColor(red, blue, green);
+                    paint.setARGB(255,red,green,blue);
 
                     colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
                 }
@@ -78,12 +75,20 @@ public class DialogBoxColor {
                 return false;
             }
         });
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("=================", "In onclick for confirm");
                 //Save the color and change color of the object
-                surface.setPaintColor(customPaint.getRed(), customPaint.getBlue(), customPaint.getGreen());
+                surface.setPaint(paint);
+                dialog.cancel();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 dialog.cancel();
             }
         });

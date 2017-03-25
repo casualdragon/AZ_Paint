@@ -12,8 +12,12 @@ import android.widget.TextView;
  */
 
 public class DialogBoxLineWeight {
+    private SerializablePaint paint;
+
     public DialogBoxLineWeight(final DrawingSurface surface){
+        paint = surface.getPaint();
         Context context = surface.getContext();
+
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_line_weight);
 
@@ -22,14 +26,6 @@ public class DialogBoxLineWeight {
         Button confirm = (Button) dialog.findViewById(R.id.confirm_button_line);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_button_line);
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
-
-        final CustomPaint customPaint = new CustomPaint();
         SeekBar seekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
         seekBar.setMax(250);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -40,7 +36,7 @@ public class DialogBoxLineWeight {
                     i = 1;
                 }
                 tv.setText(Integer.toString(i));
-                customPaint.setLineWeight(i);
+                paint.setStrokeWidth(i);
             }
 
             @Override
@@ -48,11 +44,20 @@ public class DialogBoxLineWeight {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Save the line weight and change stroke of the object
-                surface.setLineWeight(customPaint.getLineWeight());
+                surface.setPaint(paint);
+                dialog.cancel();
+            }
+        });
+
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 dialog.cancel();
             }
         });
