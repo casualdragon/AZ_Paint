@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
+        final DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
         surface.setOnTouchListener(new CanvasTouchListener());
 
         ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogBoxColor();
+                DialogBoxColor(surface);
             }
         });
         ImageView lineWeight = (ImageView) findViewById(R.id.lineWeight);
@@ -57,13 +57,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void DialogBoxColor(){
+    private void DialogBoxColor(final DrawingSurface surface){
+
+        final int r;
+
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.dialog_color);
 
         dialog.show();
 
-        Button confirm = (Button) dialog.findViewById(R.id.confirm_button_color);
+        final Button confirm = (Button) dialog.findViewById(R.id.confirm_button_color);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_button_color);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,18 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Save the color and change color of the object
-            }
-        });
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
 //        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
         final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.colorchart);
 //        final Bitmap bitmap = bitmapDrawable.getBitmap();
-
+        final ColorP colorP = new ColorP();
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -102,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
 
                     int pixel = bitmap.getPixel(convertedX, convertedY);
 
-                    int red = Color.red(pixel);
-                    int blue = Color.blue(pixel);
-                    int green = Color.green(pixel);
+                    final int red = Color.red(pixel);
+                    final int blue = Color.blue(pixel);
+                    final int green = Color.green(pixel);
 
                     EditText redEditText = (EditText) dialog.findViewById(R.id.red);
                     EditText greenEditText = (EditText) dialog.findViewById(R.id.green);
@@ -113,14 +110,51 @@ public class MainActivity extends AppCompatActivity {
                     redEditText.setText(Integer.toString(red));
                     blueEditText.setText(Integer.toString(blue));
                     greenEditText.setText(Integer.toString(green));
+                    colorP.setColor(red, blue, green);
 
                     colorDisplay.setBackgroundColor(Color.argb(255, red, green, blue));
                 }
+
                 return false;
             }
         });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("=================", "In onclick for confirm");
+                //Save the color and change color of the object
+                surface.setPaintColor(colorP.getRed(), colorP.getBlue(), colorP.getGreen());
+                dialog.cancel();
+            }
+        });
 
+    }
+    private class ColorP{
+        private int red;
+        private int green;
+        private int blue;
+        public  ColorP(){
+            red= 0;
+            green = 0;
+            blue = 0;
+        }
+        public void setColor(int red, int green, int blue){
+            this.red= red;
+            this.green = green;
+            this.blue = blue;
+        }
 
+        public int getRed() {
+            return red;
+        }
+
+        public int getGreen() {
+            return green;
+        }
+
+        public int getBlue() {
+            return blue;
+        }
     }
 
     //Records points and sends them to
@@ -192,11 +226,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 TextView tv = (TextView) dialog.findViewById(R.id.textview_line);
-                int val = Integer.parseInt(tv.getText().toString());
                 if(i == 0){
-                    val = 1;
+                    i = 1;
                 }
-                tv.setText(Integer.toString(val));
+                tv.setText(Integer.toString(i));
             }
 
             @Override
