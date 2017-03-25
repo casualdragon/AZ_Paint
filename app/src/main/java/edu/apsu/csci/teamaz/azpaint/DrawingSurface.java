@@ -88,5 +88,11 @@ public class DrawingSurface extends View{
             objects.remove(objects.size() - 1);
         }
     }
+    public void setPaintColor(int red,  int green, int blue){
+        paint.setARGB(255, red, green, blue);
+    }
+    public void setLineWeight(int weight){
+
+    }
 
 }

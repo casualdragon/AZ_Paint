@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@android:color/background_dark">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
+
+        <TextView
+            android:text="Color Picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_weight="0.42"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
+            android:gravity="center" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -23,13 +35,13 @@
             android:layout_height="85dp"
             android:layout_alignBottom="@+id/colorchart"
             android:layout_toEndOf="@+id/colorchart"
-            android:id="@+id/colorDisplay" />
+            android:id="@+id/colorDisplay"
+            android:layout_weight="0.51" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_width="wrap_content"
@@ -38,7 +50,10 @@
                 android:ems="10"
                 android:id="@+id/red"
                 android:layout_weight="1"
-                android:hint="Red" />
+                android:hint="Red"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:gravity="center" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -47,7 +62,10 @@
                 android:ems="10"
                 android:id="@+id/green"
                 android:layout_weight="1"
-                android:hint="Green" />
+                android:hint="Green"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:gravity="center" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -56,7 +74,10 @@
                 android:ems="10"
                 android:id="@+id/blue"
                 android:layout_weight="1"
-                android:hint="Blue" />
+                android:hint="Blue"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,14 +90,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/confirm_button_color"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
 
             <Button
                 android:text="Cancel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/cancel_button_color"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
 
         </LinearLayout>
     </LinearLayout>
