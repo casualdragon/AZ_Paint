@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void DialogBoxColor(final DrawingSurface surface){
-
         final int r;
 
         final Dialog dialog = new Dialog(MainActivity.this);
@@ -76,9 +75,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
-//        BitmapDrawable bitmapDrawable = (BitmapDrawable) colorchart.getBackground();
         final Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.colorchart);
-//        final Bitmap bitmap = bitmapDrawable.getBitmap();
         final ColorP colorP = new ColorP();
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override

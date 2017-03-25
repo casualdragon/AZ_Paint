@@ -11,7 +11,7 @@ import android.graphics.Point;
 public class CanvasableObject {
     public enum ObjectType {LINE, RECTANGLE};
 
-    private Paint paint;
+    private SerializablePaint paint;
     private Point startPoint;
     private Point endPoint;
 
@@ -19,7 +19,7 @@ public class CanvasableObject {
 
     //Constructor
     public CanvasableObject(Paint paint, Point startPoint, Point endPoint, ObjectType type) {
-        this.paint = new Paint();
+        this.paint = new SerializablePaint();
         this.paint.setStyle(paint.getStyle());
         this.paint.setStrokeWidth(paint.getStrokeWidth());
         this.paint.setColor(paint.getColor());
@@ -34,7 +34,7 @@ public class CanvasableObject {
         return paint;
     }
 
-    public void setPaint(Paint paint) {
+    public void setPaint(SerializablePaint paint) {
         this.paint = paint;
     }
 

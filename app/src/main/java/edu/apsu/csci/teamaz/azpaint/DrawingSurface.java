@@ -10,13 +10,13 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-/**
- * Created by Amy on 3/21/2017.
+/*
+    Contained in this file is the definition for the view the user draws on.
  */
 
 public class DrawingSurface extends View{
     ArrayList<CanvasableObject> objects;
-    Paint paint;
+    SerializablePaint paint;
     CanvasableObject.ObjectType objectType;
 
     //Constructors
@@ -39,7 +39,7 @@ public class DrawingSurface extends View{
     private void setup(AttributeSet attrs){
         objects = new ArrayList<>();
         objectType = CanvasableObject.ObjectType.RECTANGLE;
-        paint = new Paint();
+        paint = new SerializablePaint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setStrokeWidth(10f);
@@ -73,13 +73,13 @@ public class DrawingSurface extends View{
             }
         }
         //do some stuff
-        invalidate();
     }
 
     //Adds passed points as object of objectType.
     public void add(Point start, Point end){
         //adds object with current settings
         objects.add(new CanvasableObject(paint, start,end, objectType));
+        invalidate();
     }
 
     //Removes the last object.
