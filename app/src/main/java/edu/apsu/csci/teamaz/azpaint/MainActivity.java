@@ -50,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
                 new DialogBoxLineWeight(surface);
             }
         });
+        ImageView clear = (ImageView) findViewById(R.id.clear);
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                surface.clearSurface();
+                surface.invalidate();
+                surface.setBackgroundColor(0xFFFFFFFF);
+            }
+        });
     }
 
 

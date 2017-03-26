@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@android:color/background_dark">
@@ -80,10 +81,17 @@
                 android:gravity="center" />
         </LinearLayout>
 
+        <Button
+            android:text="Set As Background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/backgroud_button"
+            android:layout_weight="0.42" />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="84dp">
 
             <Button
                 android:text="Confirm"
@@ -104,4 +112,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</ScrollView>
