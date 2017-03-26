@@ -4,13 +4,15 @@ import android.graphics.Paint;
 
 import java.io.Serializable;
 
+import java.io.Serializable;
+
 /**
  * Created by nonam on 3/23/2017.
  */
 
 //A class for the different types of objects that can be drawn
 public class CanvasableObject implements Serializable{
-    public enum ObjectType {FREE, LINE, RECTANGLE};
+    public enum ObjectType implements Serializable {FREE, LINE, RECTANGLE};
 
     private SerializablePaint paint;
     private SerializablePoint startPoint;

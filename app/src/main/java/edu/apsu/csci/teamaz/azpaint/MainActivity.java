@@ -15,14 +15,23 @@ public class MainActivity extends AppCompatActivity {
     final static String SURFACE = "SURFACE";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         final DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
+        if (savedInstanceState != null){
+            for(String key : savedInstanceState.keySet()) {
+                Log.i("====================", "Keys: " + key);
+            }
+        }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(SURFACE)){
-            surface.setSettings((DrawingSurface) savedInstanceState.getSerializable(SURFACE));
+            DrawingSurface drawingSurface = (DrawingSurface) savedInstanceState.getSerializable(SURFACE);
+            surface.setSettings(drawingSurface);
+            surface.setObjects(drawingSurface.getObjects());
+            surface.invalidate();
+            Log.i("===================", "Reading Bundle");
         }
 
         surface.setOnTouchListener(new CanvasTouchListener());
@@ -47,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                savedInstanceState.putSerializable("SURFACE", surface);
                 new DialogBoxColor(surface);
             }
         });
@@ -80,9 +90,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("==================", "In onSavedInstanceState");
         outState.putSerializable(SURFACE, (DrawingSurface) findViewById(R.id.canvas));
+        super.onSaveInstanceState(outState);
     }
 
     //Records points and sends them to

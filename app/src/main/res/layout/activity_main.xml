@@ -28,6 +28,20 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:srcCompat="@drawable/undo"
+            android:id="@+id/undo"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/pan"
+            android:id="@+id/pan"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/line"
             android:layout_weight="1"
             android:src="@drawable/pencil3"
@@ -74,4 +88,11 @@
             android:clickable="true" />
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/undo"
+        android:id="@+id/imageView"
+        android:layout_weight="1" />
 </LinearLayout>

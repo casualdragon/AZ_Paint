@@ -120,4 +120,11 @@ public class DrawingSurface extends View implements Serializable{
     }
 
 
+    public ArrayList<CanvasableObject> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(ArrayList<CanvasableObject> objects) {
+        this.objects = objects;
+    }
 }
