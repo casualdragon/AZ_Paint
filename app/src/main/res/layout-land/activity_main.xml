@@ -46,6 +46,16 @@
             android:layout_weight="1"
             android:clickable="true" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/sweeper"
+            android:id="@+id/clear"
+            android:layout_weight="1"
+            android:clickable="true" />
+
+
+
     </LinearLayout>
 
     <view
@@ -80,11 +90,21 @@
             android:src="@drawable/light_weight"
             android:clickable="true" />
 
+
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/sweeper"
-            android:id="@+id/clear"
+            app:srcCompat="@drawable/undo"
+            android:id="@+id/undo"
+            android:layout_weight="1"
+            android:clickable="true" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/pan"
+            android:id="@+id/pan"
             android:layout_weight="1"
             android:clickable="true" />
 

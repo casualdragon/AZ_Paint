@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 public class DrawingSurface extends View implements Serializable{
     private ArrayList<CanvasableObject> objects;
     private SerializablePaint paint;
+    private SerializablePoint offset;
     private CanvasableObject.ObjectType objectType;
 
     //Constructors
@@ -36,11 +38,11 @@ public class DrawingSurface extends View implements Serializable{
     }
 
     public void setSettings(DrawingSurface surface){
-
-            this.paint = surface.paint;
-            this.objectType = surface.objectType;
-            this.objects = surface.objects;
-            invalidate();
+        this.paint = surface.paint;
+        this.objectType = surface.objectType;
+        this.objects = surface.objects;
+        this.offset = surface.offset;
+        invalidate();
     }
 
 
@@ -48,6 +50,7 @@ public class DrawingSurface extends View implements Serializable{
     private void setup(AttributeSet attrs){
         objects = new ArrayList<>();
         objectType = CanvasableObject.ObjectType.FREE;
+        this.offset = new SerializablePoint(0,0);
         paint = new SerializablePaint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -65,19 +68,19 @@ public class DrawingSurface extends View implements Serializable{
                 case FREE:
                 case LINE:
                     canvas.drawLine(
-                            object.getX1(),
-                            object.getY1(),
-                            object.getX2(),
-                            object.getY2(),
+                            object.getX1() + offset.x,
+                            object.getY1() + offset.y,
+                            object.getX2() + offset.x,
+                            object.getY2() + offset.y,
                             object.getPaint()
                     );
                     break;
                 case RECTANGLE:
                     canvas.drawRect(
-                            object.getX1(),
-                            object.getY1(),
-                            object.getX2(),
-                            object.getY2(),
+                            object.getX1() + offset.x,
+                            object.getY1() + offset.y,
+                            object.getX2() + offset.x,
+                            object.getY2() + offset.y,
                             object.getPaint()
                     );
             }
@@ -88,7 +91,13 @@ public class DrawingSurface extends View implements Serializable{
     //Adds passed points as object of objectType.
     public void add(SerializablePoint start, SerializablePoint end){
         //adds object with current settings
-        objects.add(new CanvasableObject(paint, start,end, objectType));
+        Log.i("======", "" + offset.x+ " | " + offset.y );
+
+        objects.add(new CanvasableObject(
+                paint,
+                new SerializablePoint(start.x - offset.x , start.y -offset.y ),
+                new SerializablePoint(end.x - offset.x , end.y -offset.y ),
+                objectType));
         invalidate();
     }
 
@@ -97,6 +106,13 @@ public class DrawingSurface extends View implements Serializable{
         if(objects.size() > 1) {
             objects.remove(objects.size() - 1);
         }
+
+    }
+
+    public void addOffset(SerializablePoint point){
+        this.offset.x += point.x;
+        this.offset.y += point.y;
+        invalidate();
     }
 
     public void setPaint(SerializablePaint paint){
