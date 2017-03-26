@@ -120,12 +120,10 @@ public class MainActivity extends AppCompatActivity {
         private SerializablePoint startPoint;
         private SerializablePoint endPoint;
         DrawingSurface surface;
-        private int count;
 
         public CanvasTouchListener() {
             super();
             surface = (DrawingSurface) findViewById(R.id.canvas);
-            count = 0;
         }
 
         @Override
@@ -137,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 startPoint = null;
                 endPoint = null;
                 startPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
-                count = 0;
                 Log.i("=======", "Touch DOWN");
                 return true;
             }
@@ -147,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
                     endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
                     surface.add(startPoint, endPoint);
                     Log.i("=======", "Touch UP");
+                    surface.removePrevious();
+
                 } else{
                     int x, y;
                     x = (int) motionEvent.getX() - startPoint.x;
@@ -154,24 +153,16 @@ public class MainActivity extends AppCompatActivity {
                     surface.addOffset(new SerializablePoint(x,y));
                 }
                 return true;
-
             }
             //Otherwise it updates it with the current position
             else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
-                    count++;
                     endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
 
-                    if (surface.getObjectType() != CanvasableObject.ObjectType.FREE) {
-                        surface.removePrevious();
-                    }
+                    surface.removePrevious();
+                    surface.add(startPoint, endPoint);
 
-                    //surface.add(startPoint, endPoint);
 
-                    if (surface.getObjectType() == CanvasableObject.ObjectType.FREE) {
-                        surface.add(startPoint, endPoint);
-                        startPoint = endPoint;
-                    }
                 } else {
                     int x, y;
                     x = (int) motionEvent.getX() - startPoint.x;

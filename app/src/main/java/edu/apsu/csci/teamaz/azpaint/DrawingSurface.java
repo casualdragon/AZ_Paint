@@ -49,7 +49,7 @@ public class DrawingSurface extends View implements Serializable{
     //Set up for canvas
     private void setup(AttributeSet attrs){
         objects = new ArrayList<>();
-        objectType = CanvasableObject.ObjectType.FREE;
+        objectType = CanvasableObject.ObjectType.LINE;
         this.offset = new SerializablePoint(0,0);
         paint = new SerializablePaint();
         paint.setColor(Color.BLACK);
@@ -62,10 +62,9 @@ public class DrawingSurface extends View implements Serializable{
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        //Draws each opject based on what type it is.
+        //Draws each object based on what type it is.
         for(CanvasableObject object : objects){
             switch (object.getType()){
-                case FREE:
                 case LINE:
                     canvas.drawLine(
                             object.getX1() + offset.x,

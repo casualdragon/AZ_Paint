@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 //A class for the different types of objects that can be drawn
 public class CanvasableObject implements Serializable{
-    public enum ObjectType implements Serializable {PAN, FREE, LINE, RECTANGLE};
+    public enum ObjectType implements Serializable {PAN, LINE, RECTANGLE};
 
     private SerializablePaint paint;
     private SerializablePoint startPoint;
