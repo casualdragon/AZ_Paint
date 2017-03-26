@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         surface.removePrevious();
                     }
 
-                    surface.add(startPoint, endPoint);
+                    //surface.add(startPoint, endPoint);
 
                     if (surface.getObjectType() == CanvasableObject.ObjectType.FREE) {
                         surface.add(startPoint, endPoint);
