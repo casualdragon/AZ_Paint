@@ -1,6 +1,7 @@
 package edu.apsu.csci.teamaz.azpaint;
 
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
                 surface.clearSurface();
                 surface.invalidate();
                 surface.setBackgroundColor(0xFFFFFFFF);
+            }
+        });
+
+        ImageView eraser = (ImageView) findViewById(R.id.eraser);
+        eraser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int color =((ColorDrawable)surface.getBackground()).getColor();
+                SerializablePaint paint = surface.getPaint();
+                paint.setColor(color);
+                surface.setPaint(paint);
             }
         });
     }
