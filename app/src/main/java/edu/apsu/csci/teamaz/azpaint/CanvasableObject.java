@@ -1,24 +1,25 @@
 package edu.apsu.csci.teamaz.azpaint;
 
 import android.graphics.Paint;
-import android.graphics.Point;
+
+import java.io.Serializable;
 
 /**
  * Created by nonam on 3/23/2017.
  */
 
 //A class for the different types of objects that can be drawn
-public class CanvasableObject {
+public class CanvasableObject implements Serializable{
     public enum ObjectType {FREE, LINE, RECTANGLE};
 
     private SerializablePaint paint;
-    private Point startPoint;
-    private Point endPoint;
+    private SerializablePoint startPoint;
+    private SerializablePoint endPoint;
 
     private ObjectType type;
 
     //Constructor
-    public CanvasableObject(Paint paint, Point startPoint, Point endPoint, ObjectType type) {
+    public CanvasableObject(Paint paint, SerializablePoint startPoint, SerializablePoint endPoint, ObjectType type) {
         this.paint = new SerializablePaint();
         this.paint.setStyle(paint.getStyle());
         this.paint.setStrokeWidth(paint.getStrokeWidth());
@@ -38,19 +39,19 @@ public class CanvasableObject {
         this.paint = paint;
     }
 
-    public Point getStartPoint() {
+    public SerializablePoint getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(Point startPoint) {
+    public void setStartPoint(SerializablePoint startPoint) {
         this.startPoint = startPoint;
     }
 
-    public Point getEndPoint() {
+    public SerializablePoint getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(Point endPoint) {
+    public void setEndPoint(SerializablePoint endPoint) {
         this.endPoint = endPoint;
     }
 
