@@ -4,20 +4,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
     Contained in this file is the definition for the view the user draws on.
  */
 
-public class DrawingSurface extends View{
-    ArrayList<CanvasableObject> objects;
-    SerializablePaint paint;
-    CanvasableObject.ObjectType objectType;
+public class DrawingSurface extends View implements Serializable{
+    private ArrayList<CanvasableObject> objects;
+    private SerializablePaint paint;
+    private CanvasableObject.ObjectType objectType;
 
     //Constructors
     public DrawingSurface(Context context) {
@@ -34,6 +34,15 @@ public class DrawingSurface extends View{
         super(context, attrs, defStyleAttr);
         setup(attrs);
     }
+
+    public void setSettings(DrawingSurface surface){
+
+            this.paint = surface.paint;
+            this.objectType = surface.objectType;
+            this.objects = surface.objects;
+            invalidate();
+    }
+
 
     //Set up for canvas
     private void setup(AttributeSet attrs){
@@ -77,7 +86,7 @@ public class DrawingSurface extends View{
     }
 
     //Adds passed points as object of objectType.
-    public void add(Point start, Point end){
+    public void add(SerializablePoint start, SerializablePoint end){
         //adds object with current settings
         objects.add(new CanvasableObject(paint, start,end, objectType));
         invalidate();

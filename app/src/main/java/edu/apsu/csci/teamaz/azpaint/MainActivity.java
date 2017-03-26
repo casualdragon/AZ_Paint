@@ -1,7 +1,7 @@
 package edu.apsu.csci.teamaz.azpaint;
 
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 //Test
 
 public class MainActivity extends AppCompatActivity {
+    final static String SURFACE = "SURFACE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(SURFACE)){
+            surface.setSettings((DrawingSurface) savedInstanceState.getSerializable(SURFACE));
+        }
+
         surface.setOnTouchListener(new CanvasTouchListener());
 
         ImageView lineView = (ImageView) findViewById(R.id.line);
@@ -73,12 +79,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable(SURFACE, (DrawingSurface) findViewById(R.id.canvas));
+    }
 
     //Records points and sends them to
     private class CanvasTouchListener implements View.OnTouchListener {
-        private Point startPoint;
-        private Point endPoint;
+        private SerializablePoint startPoint;
+        private SerializablePoint endPoint;
         DrawingSurface surface;
         private int count;
 
@@ -94,14 +104,14 @@ public class MainActivity extends AppCompatActivity {
 
             //Gets starting Point
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                startPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
+                startPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
                 count = 0;
                 Log.i("=======", "Touch DOWN");
                 return true;
             }
             //Gets ending Point
             else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                endPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
+                endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
                 surface.add(startPoint, endPoint);
                 Log.i("=======", "Touch UP");
                 return true;
@@ -110,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             //Otherwise it updates it with the current position
             else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 count++;
-                endPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
+                endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
 
                 if(surface.getObjectType() != CanvasableObject.ObjectType.FREE) {
                     surface.removePrevious();
