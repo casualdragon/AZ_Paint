@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +20,7 @@ import android.widget.TextView;
  */
 
 public class DialogBoxColor {
-    private SerializablePaint paint;
+    private final SerializablePaint paint;
 
     public DialogBoxColor(final DrawingSurface surface){
         paint = surface.getPaint();
@@ -31,13 +33,24 @@ public class DialogBoxColor {
 
         dialog.show();
 
-        final Button confirm = (Button) dialog.findViewById(R.id.confirm_button_color);
+        Button confirm = (Button) dialog.findViewById(R.id.confirm_button_color);
         Button cancel = (Button) dialog.findViewById(R.id.cancel_button_color);
+        Button background = (Button)dialog.findViewById(R.id.backgroud_button);
 
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
         final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.colorchart);
 
+        final EditText redEditText = (EditText) dialog.findViewById(R.id.red);
+        final EditText greenEditText = (EditText) dialog.findViewById(R.id.green);
+        final EditText blueEditText = (EditText) dialog.findViewById(R.id.blue);
 
+        redEditText.addTextChangedListener(new textWatcher(Color.red(paint.getColor())));
+        greenEditText.addTextChangedListener(new textWatcher(Color.green(paint.getColor())));
+        blueEditText.addTextChangedListener(new textWatcher(Color.blue(paint.getColor())));
+
+        redEditText.setText(Integer.toString(Color.red(paint.getColor())));
+        greenEditText.setText(Integer.toString(Color.green(paint.getColor())));
+        blueEditText.setText(Integer.toString(Color.blue(paint.getColor())));
 
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -58,13 +71,9 @@ public class DialogBoxColor {
 
                     int pixel = bitmap.getPixel(convertedX, convertedY);
 
-                    final int red = Color.red(pixel);
-                    final int blue = Color.blue(pixel);
-                    final int green = Color.green(pixel);
-
-                    EditText redEditText = (EditText) dialog.findViewById(R.id.red);
-                    EditText greenEditText = (EditText) dialog.findViewById(R.id.green);
-                    EditText blueEditText = (EditText) dialog.findViewById(R.id.blue);
+                    int red = Color.red(pixel);
+                    int blue = Color.blue(pixel);
+                    int green = Color.green(pixel);
 
                     redEditText.setText(Integer.toString(red));
                     blueEditText.setText(Integer.toString(blue));
@@ -81,13 +90,17 @@ public class DialogBoxColor {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("=================", "In onclick for confirm");
                 //Save the color and change color of the object
                 surface.setPaint(paint);
                 dialog.cancel();
             }
         });
-
+        background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                surface.setBackgroundColor(paint.getColor());
+            }
+        });
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,5 +108,28 @@ public class DialogBoxColor {
             }
         });
 
+    }
+
+    private class textWatcher implements TextWatcher{
+
+        private int color;
+        textWatcher(int color){
+            this.color = color;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
     }
 }
