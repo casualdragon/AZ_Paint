@@ -175,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
                     int x, y;
                     x = (int) motionEvent.getX() - startPoint.x;
                     y = (int) motionEvent.getY() - startPoint.y;
-                    startPoint = new SerializablePoint(startPoint.x + x,startPoint.y + y);
+                    startPoint.x += x;
+                    startPoint.y += y;
                     surface.addOffset(new SerializablePoint(x,y));
                 }
 
