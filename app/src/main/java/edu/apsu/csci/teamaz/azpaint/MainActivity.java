@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                savedInstanceState.putSerializable("SURFACE", surface);
+//                savedInstanceState.putSerializable("SURFACE", surface);
                 new DialogBoxColor(surface);
             }
         });
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         eraser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                surface.setObjectType(CanvasableObject.ObjectType.RECTANGLE);
                 int color =((ColorDrawable)surface.getBackground()).getColor();
                 SerializablePaint paint = surface.getPaint();
                 paint.setColor(color);
