@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
+    android:fillViewport="true"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="70"
+        >
+
+        <TextView
+            android:text="Color Picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_weight="10"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
+            android:gravity="center"
+            />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="30">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="219dp"
+                android:background="@drawable/colorchart"
+                android:id="@+id/colorchart"
+                android:layout_alignParentStart="true"
+                android:clickable="true"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/colorchart"
+                android:layout_toEndOf="@+id/colorchart"
+                android:id="@+id/colorDisplay"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/red"
+                android:layout_weight="1"
+                android:hint="Red"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:gravity="center" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/green"
+                android:layout_weight="1"
+                android:hint="Green"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:gravity="center" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/blue"
+                android:layout_weight="1"
+                android:hint="Blue"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <Button
+            android:text="Set As Background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/backgroud_button"
+            android:layout_weight="10" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="84dp"
+            android:layout_weight="10">
+
+            <Button
+                android:text="Confirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/confirm_button_color"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:text="Cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/cancel_button_color"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
