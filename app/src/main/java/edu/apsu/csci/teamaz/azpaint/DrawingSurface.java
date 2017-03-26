@@ -91,6 +91,7 @@ public class DrawingSurface extends View implements Serializable{
     //Adds passed points as object of objectType.
     public void add(SerializablePoint start, SerializablePoint end){
         //adds object with current settings
+        Log.i("=================", "adding object");
         Log.i("======", "" + offset.x+ " | " + offset.y );
 
         objects.add(new CanvasableObject(
@@ -103,8 +104,13 @@ public class DrawingSurface extends View implements Serializable{
 
     //Removes the last object.
     public void removePrevious(){
-        if(objects.size() > 1) {
+        if(!objects.isEmpty()) {
+            Log.i("====================", "Removing last object");
+            for(int i = 0; i < objects.size(); i++){
+                Log.i("==================", "object "+ objects.get(i).toString());
+            }
             objects.remove(objects.size() - 1);
+            invalidate();
         }
 
     }

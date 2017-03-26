@@ -78,5 +78,8 @@ public class CanvasableObject implements Serializable{
         return endPoint.y;
     }
 
-
+    @Override
+    public String toString() {
+        return "x1: "+startPoint.x + " y1: " +startPoint.y + " x2: " +endPoint.x + " y2: "+ endPoint.y;
+    }
 }
