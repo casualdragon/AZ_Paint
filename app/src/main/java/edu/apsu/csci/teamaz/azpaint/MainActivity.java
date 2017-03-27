@@ -1,6 +1,7 @@
 package edu.apsu.csci.teamaz.azpaint;
 
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -23,8 +24,8 @@ import android.widget.ImageView;
   *     *Undo
   *         #Description - Allows the user to delete the last drawn object
   *         #Classes - DrawingSurface, CanvasableObject
-  *         #Methods -
-  *         Variables -
+  *         #Methods - removePrevious(), invalidate()
+  *         Variables - DrawingSurface, surface
   *     *Set the Background Color
   *     *Eraser
   *     *Pan
@@ -148,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
     private class CanvasTouchListener implements View.OnTouchListener {
         //Startpoint is where the user clicks initially.
         //Endpoint is where the user releases their click or where the cursor is for ACTION_MOVE.
-        private SerializablePoint startPoint;
-        private SerializablePoint endPoint;
+        private Point startPoint;
+        private Point endPoint;
         DrawingSurface surface;
 
         //Default constructor saves the surface to the object for later use.
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 startPoint = null;
                 endPoint = null;
-                startPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
+                startPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                 Log.i("=======", "Touch DOWN");
                 return true;
             }
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
             //If the user is panning it sends the new offset to the surface.
             else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
-                    endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
+                    endPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                     surface.add(startPoint, endPoint);
                     Log.i("=======", "Touch UP");
 //                    surface.removePrevious();
@@ -189,11 +190,11 @@ public class MainActivity extends AppCompatActivity {
             //is being drawn. If the user is panning it adds the offset.
             else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
-                    endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
+                    endPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                     surface.removePrevious();
                     surface.add(startPoint, endPoint);
                 } else {
-                    SerializablePoint offset = calculateOffset(motionEvent);
+                    Point offset = calculateOffset(motionEvent);
                     startPoint.x += offset.x;
                     startPoint.y += offset.y;
                 }
@@ -203,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @NonNull
-        private SerializablePoint calculateOffset(MotionEvent motionEvent) {
-            SerializablePoint offset = new SerializablePoint(0,0);
+        private Point calculateOffset(MotionEvent motionEvent) {
+            Point offset = new Point(0,0);
             offset.x = (int) motionEvent.getX() - startPoint.x;
             offset.y = (int) motionEvent.getY() - startPoint.y;
             surface.addOffset(offset);

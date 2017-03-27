@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +21,7 @@ public class DrawingSurface extends View implements Serializable{
     //type of object being drawn.
     private ArrayList<CanvasableObject> objects;
     private Paint paint;
-    private SerializablePoint offset;
+    private Point offset;
     private CanvasableObject.ObjectType objectType;
 
     //Constructors
@@ -43,7 +44,7 @@ public class DrawingSurface extends View implements Serializable{
     private void setup(AttributeSet attrs){
         objects = new ArrayList<>();
         objectType = CanvasableObject.ObjectType.LINE;
-        offset = new SerializablePoint(0,0);
+        offset = new Point(0,0);
 
         paint = new Paint();
         paint.setColor(Color.BLACK);
@@ -93,15 +94,15 @@ public class DrawingSurface extends View implements Serializable{
 
     //Add creates and adds a new object based on the current objectType and the points passed to the
     //method.
-    public void add(SerializablePoint start, SerializablePoint end){
+    public void add(Point start, Point end){
         //adds object with current settings
         Log.i("=================", "adding object");
         Log.i("======", "" + offset.x+ " | " + offset.y );
 
         objects.add(new CanvasableObject(
                 paint,
-                new SerializablePoint(start.x - offset.x , start.y -offset.y ),
-                new SerializablePoint(end.x - offset.x , end.y -offset.y ),
+                new Point(start.x - offset.x , start.y -offset.y ),
+                new Point(end.x - offset.x , end.y -offset.y ),
                 objectType));
 
         invalidate();
@@ -125,7 +126,7 @@ public class DrawingSurface extends View implements Serializable{
 
     //The addOffset method adds the values of point to the offset point. This is primarily used for
     //panning and drawing objects after panning.
-    public void addOffset(SerializablePoint point){
+    public void addOffset(Point point){
         this.offset.x += point.x;
         this.offset.y += point.y;
         invalidate();
