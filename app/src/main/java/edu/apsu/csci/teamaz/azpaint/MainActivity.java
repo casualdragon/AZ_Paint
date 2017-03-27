@@ -25,23 +25,37 @@ import android.widget.ImageView;
   *         #Description - Allows the user to delete the last drawn object
   *         #Classes - DrawingSurface, CanvasableObject
   *         #Methods - removePrevious(), invalidate()
-  *         Variables - DrawingSurface, surface
+  *         #Variables - DrawingSurface surface
   *     *Set the Background Color
+  *         #Description - Changes the background color of the canvas
+  *         #Methods -
+  *         #Variables - DrawingSurface surface
   *     *Eraser
+  *         #Description - Creates a line of the background color, which changes with
+  *                        the background color
+  *         #Classes -
+  *         #Methods -
+  *         #Variables -
   *     *Pan
-  *     *Color Picker
+  *         #Description - Allows the canvas to be shifted around, which is determined by the user
+  *         #Classes -
+  *         #Methods -
+  *         #Variables -
   */
 
 public class MainActivity extends AppCompatActivity {
     // Keys for saveInstanceState.
     final static String SURFACE = "SURFACE";
 
+    //Checks if the line is erasing
+    private boolean isErased;
     //Overriden onCreate method this activity. This override gets data from saveInstanceState if it
     //is available then sets the onClickListeners for all the buttons and the DrawingSurface.
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isErased = false;
 
         final DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
 
@@ -49,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null && savedInstanceState.containsKey(SURFACE)){
             DrawingSurface drawingSurface = (DrawingSurface) savedInstanceState.getSerializable(SURFACE);
             surface.setSettings(drawingSurface);
+            surface.setBackgroundColor(drawingSurface.getBackgroundcolor());
             Log.i("===================", "Reading Bundle");
         }
 
@@ -74,18 +89,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //The next two onClickListeners open the corresponding dialogbox.
-        ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
+        final ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                savedInstanceState.putSerializable("SURFACE", surface);
+                isErased = false;
+                surface.setErased(isErased);
                 new DialogBoxColor(surface);
             }
         });
+
         ImageView lineWeight = (ImageView) findViewById(R.id.lineWeight);
         lineWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                surface.setErased(isErased);
                 new DialogBoxLineWeight(surface);
             }
         });
@@ -107,11 +125,18 @@ public class MainActivity extends AppCompatActivity {
         eraser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                surface.setObjectType(CanvasableObject.ObjectType.RECTANGLE);
+                isErased = !isErased;
+                Log.i("==================", "isErasedMain: "+ isErased);
+                surface.setObjectType(CanvasableObject.ObjectType.LINE);
+                surface.setErased(isErased);
                 int color =((ColorDrawable)surface.getBackground()).getColor();
-                Paint paint = surface.getPaint();
-                paint.setColor(color);
-                surface.setPaint(paint);
+                Paint backgroundcolor = surface.getPaint();
+                backgroundcolor.setColor(color);
+                if(isErased) {
+                    colorChart.setVisibility(View.GONE);
+                }else {
+                    colorChart.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -135,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     //Override for onSavedInstanceState. This override saves the surface when the screen is rotated.
     @Override

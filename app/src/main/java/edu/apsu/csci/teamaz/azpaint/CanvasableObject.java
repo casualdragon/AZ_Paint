@@ -5,13 +5,19 @@ import android.graphics.Point;
 
 import java.io.Serializable;
 
-import java.io.Serializable;
-
  /*
   *  Contained in this file is the definition for the object that can be drawn on screen.
   */
 
 public class CanvasableObject implements Serializable{
+    public boolean isErased() {
+        return Erased;
+    }
+
+    public void setErased(boolean erased) {
+        Erased = erased;
+    }
+
     //Specifies the type of object to be drawn when the use clicks or in the case of pan it specifies
     //that the screen needs to be panned instead of drawing a new object.
     public enum ObjectType implements Serializable {PAN, LINE, RECTANGLE};
@@ -21,9 +27,10 @@ public class CanvasableObject implements Serializable{
     private Point startPoint;
     private Point endPoint;
     private ObjectType type;
+    private boolean Erased;
 
     //Constructor
-    public CanvasableObject(Paint paint, Point startPoint, Point endPoint, ObjectType type) {
+    public CanvasableObject(Paint paint, Point startPoint, Point endPoint, ObjectType type, boolean Erased) {
         this.paint = new Paint();
         this.paint.setStyle(paint.getStyle());
         this.paint.setStrokeWidth(paint.getStrokeWidth());
@@ -32,6 +39,7 @@ public class CanvasableObject implements Serializable{
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.type = type;
+        this.Erased = Erased;
     }
 
     //Getters and Setters

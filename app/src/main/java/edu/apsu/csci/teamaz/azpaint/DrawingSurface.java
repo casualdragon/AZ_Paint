@@ -23,6 +23,8 @@ public class DrawingSurface extends View implements Serializable{
     private Paint paint;
     private Point offset;
     private CanvasableObject.ObjectType objectType;
+    private int backgroundcolor;
+    private boolean isErased;
 
     //Constructors
     public DrawingSurface(Context context) {
@@ -45,11 +47,12 @@ public class DrawingSurface extends View implements Serializable{
         objects = new ArrayList<>();
         objectType = CanvasableObject.ObjectType.LINE;
         offset = new Point(0,0);
-
+        isErased = false;
         paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setStrokeWidth(10f);
+        backgroundcolor = 0xffffffff;
     }
 
     //SetSettings is a copy method for this object that copies the settings from another of the same
@@ -59,6 +62,8 @@ public class DrawingSurface extends View implements Serializable{
         this.objectType = surface.objectType;
         this.objects = surface.objects;
         this.offset = surface.offset;
+        this.backgroundcolor = surface.backgroundcolor;
+        this.isErased = surface.isErased;
         invalidate();
     }
 
@@ -103,7 +108,7 @@ public class DrawingSurface extends View implements Serializable{
                 paint,
                 new Point(start.x - offset.x , start.y -offset.y ),
                 new Point(end.x - offset.x , end.y -offset.y ),
-                objectType));
+                objectType, isErased));
 
         invalidate();
     }
@@ -137,6 +142,19 @@ public class DrawingSurface extends View implements Serializable{
         objects.clear();
     }
 
+    //Updates objects to the current backgroundcolor if isErased is true
+    public void updatedEraserObjects(){
+        for (CanvasableObject object : objects){
+            Log.i("==================", "IsErasedDrawing: "+ object.isErased());
+            if(object.isErased()){
+                Paint paint = object.getPaint();
+                paint.setColor(backgroundcolor);
+                object.setPaint(paint);
+            }
+        }
+        invalidate();
+    }
+
     //Getters and setters.
     public Paint getPaint(){
         return paint;
@@ -163,9 +181,19 @@ public class DrawingSurface extends View implements Serializable{
     }
 
 
+    public int getBackgroundcolor() {
+        return backgroundcolor;
+    }
 
+    public void setBackgroundcolor(int backgroundcolor) {
+        this.backgroundcolor = backgroundcolor;
+    }
 
+    public boolean isErased() {
+        return isErased;
+    }
 
-
-
+    public void setErased(boolean erased) {
+        isErased = erased;
+    }
 }

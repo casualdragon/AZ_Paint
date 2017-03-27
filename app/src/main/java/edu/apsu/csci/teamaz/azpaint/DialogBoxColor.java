@@ -100,6 +100,8 @@ public class DialogBoxColor {
             @Override
             public void onClick(View view) {
                 surface.setBackgroundColor(paint.getColor());
+                surface.setBackgroundcolor(paint.getColor());
+                surface.updatedEraserObjects();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
