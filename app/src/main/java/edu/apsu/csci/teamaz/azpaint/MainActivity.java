@@ -156,11 +156,8 @@ public class MainActivity extends AppCompatActivity {
             //If the user is panning it sends the new offset to the surface.
             else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
-                    endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
-                    surface.add(startPoint, endPoint);
+                    updateLine(motionEvent);
                     Log.i("=======", "Touch UP");
-//                    surface.removePrevious();
-
                 }
                 else{
                     calculateOffset(motionEvent);
@@ -171,9 +168,7 @@ public class MainActivity extends AppCompatActivity {
             //is being drawn. If the user is panning it adds the offset.
             else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
-                    endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
-                    surface.removePrevious();
-                    surface.add(startPoint, endPoint);
+                    updateLine(motionEvent);
                 } else {
                     SerializablePoint offset = calculateOffset(motionEvent);
                     startPoint.x += offset.x;
@@ -184,6 +179,16 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        //Adds the current line to the surface and removes previous update if they exist
+        private void updateLine(MotionEvent motionEvent) {
+            if(endPoint != null){
+                surface.removePrevious();
+            }
+            endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
+            surface.add(startPoint, endPoint);
+        }
+
+        //Calculates the offset for pannings
         @NonNull
         private SerializablePoint calculateOffset(MotionEvent motionEvent) {
             SerializablePoint offset = new SerializablePoint(0,0);
