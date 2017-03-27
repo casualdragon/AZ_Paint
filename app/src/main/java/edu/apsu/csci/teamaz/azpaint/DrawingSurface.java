@@ -19,7 +19,7 @@ public class DrawingSurface extends View implements Serializable{
     //List of objects that are drawn, the current paint, the offset for panning and the current
     //type of object being drawn.
     private ArrayList<CanvasableObject> objects;
-    private SerializablePaint paint;
+    private Paint paint;
     private SerializablePoint offset;
     private CanvasableObject.ObjectType objectType;
 
@@ -45,11 +45,10 @@ public class DrawingSurface extends View implements Serializable{
         objectType = CanvasableObject.ObjectType.LINE;
         offset = new SerializablePoint(0,0);
 
-        paint = new SerializablePaint();
+        paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setStrokeWidth(10f);
-        //do something
     }
 
     //SetSettings is a copy method for this object that copies the settings from another of the same
@@ -109,7 +108,8 @@ public class DrawingSurface extends View implements Serializable{
     }
 
     //RemovePrevious removes the last object from the objects method. This is primarily used for
-    //refreshing the shape as the user moves their cursor.
+    //refreshing the shape as the user moves their cursor. In addition, this method is also used
+    //with the undo imageView onClick event.
     public void removePrevious(){
         if(!objects.isEmpty()) {
             Log.i("====================", "Removing last object");
@@ -137,7 +137,7 @@ public class DrawingSurface extends View implements Serializable{
     }
 
     //Getters and setters.
-    public SerializablePaint getPaint(){
+    public Paint getPaint(){
         return paint;
     }
 
@@ -149,7 +149,7 @@ public class DrawingSurface extends View implements Serializable{
         return objects;
     }
 
-    public void setPaint(SerializablePaint paint){
+    public void setPaint(Paint paint){
         this.paint = paint;
     }
 

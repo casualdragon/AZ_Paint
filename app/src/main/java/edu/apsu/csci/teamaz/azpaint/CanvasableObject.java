@@ -16,14 +16,14 @@ public class CanvasableObject implements Serializable{
     public enum ObjectType implements Serializable {PAN, LINE, RECTANGLE};
 
     //Paint, start and end points, and an objectType enum for the current object.
-    private SerializablePaint paint;
+    private Paint paint;
     private SerializablePoint startPoint;
     private SerializablePoint endPoint;
     private ObjectType type;
 
     //Constructor
     public CanvasableObject(Paint paint, SerializablePoint startPoint, SerializablePoint endPoint, ObjectType type) {
-        this.paint = new SerializablePaint();
+        this.paint = new Paint();
         this.paint.setStyle(paint.getStyle());
         this.paint.setStrokeWidth(paint.getStrokeWidth());
         this.paint.setColor(paint.getColor());
@@ -38,7 +38,7 @@ public class CanvasableObject implements Serializable{
         return paint;
     }
 
-    public void setPaint(SerializablePaint paint) {
+    public void setPaint(Paint paint) {
         this.paint = paint;
     }
 

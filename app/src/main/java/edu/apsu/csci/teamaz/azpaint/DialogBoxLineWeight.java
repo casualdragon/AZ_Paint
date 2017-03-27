@@ -2,6 +2,7 @@ package edu.apsu.csci.teamaz.azpaint;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -12,7 +13,7 @@ import android.widget.TextView;
  */
 
 public class DialogBoxLineWeight {
-    private SerializablePaint paint;
+    private Paint paint;
 
     public DialogBoxLineWeight(final DrawingSurface surface){
         paint = surface.getPaint();

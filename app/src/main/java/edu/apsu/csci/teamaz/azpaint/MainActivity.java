@@ -1,5 +1,6 @@
 package edu.apsu.csci.teamaz.azpaint;
 
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,23 @@ import android.widget.ImageView;
 
  /*
   *  Contained in this file is the main activity for the application.
+  *
+  *  Features:
+  *     *Clear
+  *         #Description - Allows the user to erase all lines and rectangles and changes the
+  *                        canvas to white.
+  *         #Classes - DrawingSurface, CanvasableObject
+  *         #Methods - clearSurface(), invalidate(), setBackground(int color)
+  *         #Variables - DrawingSurface surface
+  *     *Undo
+  *         #Description - Allows the user to delete the last drawn object
+  *         #Classes - DrawingSurface, CanvasableObject
+  *         #Methods -
+  *         Variables -
+  *     *Set the Background Color
+  *     *Eraser
+  *     *Pan
+  *     *Color Picker
   */
 
 public class MainActivity extends AppCompatActivity {
@@ -90,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 surface.setObjectType(CanvasableObject.ObjectType.RECTANGLE);
                 int color =((ColorDrawable)surface.getBackground()).getColor();
-                SerializablePaint paint = surface.getPaint();
+                Paint paint = surface.getPaint();
                 paint.setColor(color);
                 surface.setPaint(paint);
             }

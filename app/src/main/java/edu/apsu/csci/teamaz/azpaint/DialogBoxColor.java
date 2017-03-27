@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,7 +21,7 @@ import android.widget.TextView;
  */
 
 public class DialogBoxColor {
-    private final SerializablePaint paint;
+    private final Paint paint;
 
     public DialogBoxColor(final DrawingSurface surface){
         paint = surface.getPaint();
