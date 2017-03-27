@@ -6,18 +6,19 @@ import java.io.Serializable;
 
 import java.io.Serializable;
 
-/**
- * Created by nonam on 3/23/2017.
- */
+ /*
+  *  Contained in this file is the definition for the object that can be drawn on screen.
+  */
 
-//A class for the different types of objects that can be drawn
 public class CanvasableObject implements Serializable{
-    public enum ObjectType implements Serializable {PAN, FREE, LINE, RECTANGLE};
+    //Specifies the type of object to be drawn when the use clicks or in the case of pan it specifies
+    //that the screen needs to be panned instead of drawing a new object.
+    public enum ObjectType implements Serializable {PAN, LINE, RECTANGLE};
 
+    //Paint, start and end points, and an objectType enum for the current object.
     private SerializablePaint paint;
     private SerializablePoint startPoint;
     private SerializablePoint endPoint;
-
     private ObjectType type;
 
     //Constructor
@@ -65,6 +66,7 @@ public class CanvasableObject implements Serializable{
         this.type = type;
     }
 
+    //Getters for the individual points.
     public float getX1(){
         return startPoint.x;
     }
@@ -78,6 +80,7 @@ public class CanvasableObject implements Serializable{
         return endPoint.y;
     }
 
+    //Overridden toString function for debugging.
     @Override
     public String toString() {
         return "x1: "+startPoint.x + " y1: " +startPoint.y + " x2: " +endPoint.x + " y2: "+ endPoint.y;
