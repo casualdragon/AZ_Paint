@@ -9,7 +9,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
- * Created by nonam on 3/25/2017.
+ * This class used to create and display the dialog for the line weight.
+ * The line weight allows the user to select how thick to draw a line or rectangle and
+ * allows the user to set the selected color as the background.
+ * This dialog also uses a seekbar.
+ *
  */
 
 public class DialogBoxLineWeight {
@@ -32,8 +36,9 @@ public class DialogBoxLineWeight {
         //Sets previous value
         int strokeWidth = (int)paint.getStrokeWidth();
         ((TextView) dialog.findViewById(R.id.textview_line)).setText(Integer.toString(strokeWidth));
-        seekBar.setProgress(strokeWidth);
 
+        //Sets up the seekbar
+        seekBar.setProgress(strokeWidth);
         seekBar.setMax(250);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
