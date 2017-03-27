@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -24,7 +23,7 @@ public class DrawingSurface extends View implements Serializable{
     private Point offset;
     private CanvasableObject.ObjectType objectType;
     private int backgroundcolor;
-    private boolean isErased;
+    private boolean erased;
 
     //Constructors
     public DrawingSurface(Context context) {
@@ -47,7 +46,7 @@ public class DrawingSurface extends View implements Serializable{
         objects = new ArrayList<>();
         objectType = CanvasableObject.ObjectType.LINE;
         offset = new Point(0,0);
-        isErased = false;
+        erased = false;
         paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -63,7 +62,7 @@ public class DrawingSurface extends View implements Serializable{
         this.objects = surface.objects;
         this.offset = surface.offset;
         this.backgroundcolor = surface.backgroundcolor;
-        this.isErased = surface.isErased;
+        this.erased = surface.erased;
         invalidate();
     }
 
@@ -101,14 +100,14 @@ public class DrawingSurface extends View implements Serializable{
     //method.
     public void add(Point start, Point end){
         //adds object with current settings
-        Log.i("=================", "adding object");
-        Log.i("======", "" + offset.x+ " | " + offset.y );
+//        Log.i("=================", "adding object");
+//        Log.i("======", "" + offset.x+ " | " + offset.y );
 
         objects.add(new CanvasableObject(
                 paint,
                 new Point(start.x - offset.x , start.y -offset.y ),
                 new Point(end.x - offset.x , end.y -offset.y ),
-                objectType, isErased));
+                objectType, erased));
 
         invalidate();
     }
@@ -118,10 +117,10 @@ public class DrawingSurface extends View implements Serializable{
     //with the undo imageView onClick event.
     public void removePrevious(){
         if(!objects.isEmpty()) {
-            Log.i("====================", "Removing last object");
+//            Log.i("====================", "Removing last object");
 
             for(int i = 0; i < objects.size(); i++){
-                Log.i("==================", "object "+ objects.get(i).toString());
+//                Log.i("==================", "object "+ objects.get(i).toString());
             }
             objects.remove(objects.size() - 1);
             invalidate();
@@ -142,10 +141,9 @@ public class DrawingSurface extends View implements Serializable{
         objects.clear();
     }
 
-    //Updates objects to the current backgroundcolor if isErased is true
+    //Updates objects to the current backgroundcolor if erased is true
     public void updatedEraserObjects(){
         for (CanvasableObject object : objects){
-            Log.i("==================", "IsErasedDrawing: "+ object.isErased());
             if(object.isErased()){
                 Paint paint = object.getPaint();
                 paint.setColor(backgroundcolor);
@@ -190,10 +188,10 @@ public class DrawingSurface extends View implements Serializable{
     }
 
     public boolean isErased() {
-        return isErased;
+        return erased;
     }
 
     public void setErased(boolean erased) {
-        isErased = erased;
+        this.erased = erased;
     }
 }

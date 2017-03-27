@@ -11,11 +11,11 @@ import java.io.Serializable;
 
 public class CanvasableObject implements Serializable{
     public boolean isErased() {
-        return Erased;
+        return erased;
     }
 
     public void setErased(boolean erased) {
-        Erased = erased;
+        this.erased = erased;
     }
 
     //Specifies the type of object to be drawn when the use clicks or in the case of pan it specifies
@@ -27,7 +27,7 @@ public class CanvasableObject implements Serializable{
     private Point startPoint;
     private Point endPoint;
     private ObjectType type;
-    private boolean Erased;
+    private boolean erased;
 
     //Constructor
     public CanvasableObject(Paint paint, Point startPoint, Point endPoint, ObjectType type, boolean Erased) {
@@ -39,7 +39,7 @@ public class CanvasableObject implements Serializable{
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.type = type;
-        this.Erased = Erased;
+        this.erased = Erased;
     }
 
     //Getters and Setters

@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,27 +19,31 @@ import android.widget.ImageView;
   *                        canvas to white.
   *         #Classes - DrawingSurface, CanvasableObject
   *         #Methods - clearSurface(), invalidate(), setBackground(int color)
-  *         #Variables - DrawingSurface surface
+  *         #Variables - DrawingSurface surface, ArrayList<CanvasableObject> objects
   *     *Undo
   *         #Description - Allows the user to delete the last drawn object
   *         #Classes - DrawingSurface, CanvasableObject
   *         #Methods - removePrevious(), invalidate()
-  *         #Variables - DrawingSurface surface
+  *         #Variables - DrawingSurface surface, ArrayList<CanvasableObject> objects
   *     *Set the Background Color
   *         #Description - Changes the background color of the canvas
-  *         #Methods -
-  *         #Variables - DrawingSurface surface
+  *         #Classes - DrawingSurface, DialogBoxColor
+  *         #Methods - setBackgroundColor(int color), setBackgroundcolor(int color),
+  *                    onTouch(View view, MotionEvent motionEvent)
+  *         #Variables - DrawingSurface surface, int background
   *     *Eraser
-  *         #Description - Creates a line of the background color, which changes with
+  *         #Description - Creates a line of the background color, which dynamically changes with
   *                        the background color
-  *         #Classes -
-  *         #Methods -
-  *         #Variables -
+  *         #Classes - DrawingSurface, CanvasableObject
+  *         #Methods - updatedEraserObjects()
+  *         #Variables - boolean erased, DrawingSurface surface,
+  *                      ArrayList<CanvasableObject> objects
   *     *Pan
   *         #Description - Allows the canvas to be shifted around, which is determined by the user
-  *         #Classes -
-  *         #Methods -
-  *         #Variables -
+  *         #Classes - DrawingSurface
+  *         #Methods - calculateOffset(MotionEvent motionevent), addOffset(Point offset),
+  *                    onTouch(View view, MotionEvent motionEvent)
+  *         #Variables - CanvasableObject.ObjectType objectType
   */
 
 public class MainActivity extends AppCompatActivity {
@@ -48,14 +51,14 @@ public class MainActivity extends AppCompatActivity {
     final static String SURFACE = "SURFACE";
 
     //Checks if the line is erasing
-    private boolean isErased;
+    private boolean erased;
     //Overriden onCreate method this activity. This override gets data from saveInstanceState if it
     //is available then sets the onClickListeners for all the buttons and the DrawingSurface.
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        isErased = false;
+        erased = false;
 
         final DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
 
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             DrawingSurface drawingSurface = (DrawingSurface) savedInstanceState.getSerializable(SURFACE);
             surface.setSettings(drawingSurface);
             surface.setBackgroundColor(drawingSurface.getBackgroundcolor());
-            Log.i("===================", "Reading Bundle");
+//            Log.i("===================", "Reading Bundle");
         }
 
 
@@ -93,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isErased = false;
-                surface.setErased(isErased);
+                erased = false;
+                surface.setErased(erased);
                 new DialogBoxColor(surface);
             }
         });
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         lineWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                surface.setErased(isErased);
+                surface.setErased(erased);
                 new DialogBoxLineWeight(surface);
             }
         });
@@ -125,14 +128,13 @@ public class MainActivity extends AppCompatActivity {
         eraser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isErased = !isErased;
-                Log.i("==================", "isErasedMain: "+ isErased);
+                erased = !erased;
                 surface.setObjectType(CanvasableObject.ObjectType.LINE);
-                surface.setErased(isErased);
+                surface.setErased(erased);
                 int color =((ColorDrawable)surface.getBackground()).getColor();
                 Paint backgroundcolor = surface.getPaint();
                 backgroundcolor.setColor(color);
-                if(isErased) {
+                if(erased) {
                     colorChart.setVisibility(View.GONE);
                 }else {
                     colorChart.setVisibility(View.VISIBLE);
@@ -164,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
     //Override for onSavedInstanceState. This override saves the surface when the screen is rotated.
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.i("==================", "In onSavedInstanceState");
         outState.putSerializable(SURFACE, (DrawingSurface) findViewById(R.id.canvas));
         super.onSaveInstanceState(outState);
     }
@@ -185,14 +186,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            Log.i("=======", "Touch Registered");
+//            Log.i("=======", "Touch Registered");
 
             //Clears points and gets starting point.
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 startPoint = null;
                 endPoint = null;
                 startPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
-                Log.i("=======", "Touch DOWN");
+//                Log.i("=======", "Touch DOWN");
                 return true;
             }
             //Gets ending Point and adds the object unless user is panning.
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
                     endPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                     surface.add(startPoint, endPoint);
-                    Log.i("=======", "Touch UP");
+//                    Log.i("=======", "Touch UP");
 //                    surface.removePrevious();
 
                 }
