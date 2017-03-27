@@ -1,5 +1,7 @@
 package edu.apsu.csci.teamaz.azpaint;
 
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,18 +13,53 @@ import android.widget.ImageView;
 
  /*
   *  Contained in this file is the main activity for the application.
+  *
+  *  Features:
+  *     *Clear
+  *         #Description - Allows the user to erase all lines and rectangles and changes the
+  *                        canvas to white.
+  *         #Classes - DrawingSurface, CanvasableObject
+  *         #Methods - clearSurface(), invalidate(), setBackground(int color)
+  *         #Variables - DrawingSurface surface, ArrayList<CanvasableObject> objects
+  *     *Undo
+  *         #Description - Allows the user to delete the last drawn object
+  *         #Classes - DrawingSurface, CanvasableObject
+  *         #Methods - removePrevious(), invalidate()
+  *         #Variables - DrawingSurface surface, ArrayList<CanvasableObject> objects
+  *     *Set the Background Color
+  *         #Description - Changes the background color of the canvas
+  *         #Classes - DrawingSurface, DialogBoxColor
+  *         #Methods - setBackgroundColor(int color), setBackgroundcolor(int color),
+  *                    onTouch(View view, MotionEvent motionEvent)
+  *         #Variables - DrawingSurface surface, int background
+  *     *Eraser
+  *         #Description - Creates a line of the background color, which dynamically changes with
+  *                        the background color
+  *         #Classes - DrawingSurface, CanvasableObject
+  *         #Methods - updatedEraserObjects()
+  *         #Variables - boolean erased, DrawingSurface surface,
+  *                      ArrayList<CanvasableObject> objects
+  *     *Pan
+  *         #Description - Allows the canvas to be shifted around, which is determined by the user
+  *         #Classes - DrawingSurface
+  *         #Methods - calculateOffset(MotionEvent motionevent), addOffset(Point offset),
+  *                    onTouch(View view, MotionEvent motionEvent)
+  *         #Variables - CanvasableObject.ObjectType objectType
   */
 
 public class MainActivity extends AppCompatActivity {
     // Keys for saveInstanceState.
     final static String SURFACE = "SURFACE";
 
+    //Checks if the line is erasing
+    private boolean erased;
     //Overriden onCreate method this activity. This override gets data from saveInstanceState if it
     //is available then sets the onClickListeners for all the buttons and the DrawingSurface.
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        erased = false;
 
         final DrawingSurface surface = (DrawingSurface) findViewById(R.id.canvas);
 
@@ -30,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null && savedInstanceState.containsKey(SURFACE)){
             DrawingSurface drawingSurface = (DrawingSurface) savedInstanceState.getSerializable(SURFACE);
             surface.setSettings(drawingSurface);
-            Log.i("===================", "Reading Bundle");
+            surface.setBackgroundColor(drawingSurface.getBackgroundcolor());
+//            Log.i("===================", "Reading Bundle");
         }
 
 
@@ -55,18 +93,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //The next two onClickListeners open the corresponding dialogbox.
-        ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
+        final ImageView colorChart = (ImageView) findViewById(R.id.colorChart);
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                savedInstanceState.putSerializable("SURFACE", surface);
+                erased = false;
+                surface.setErased(erased);
                 new DialogBoxColor(surface);
             }
         });
+
         ImageView lineWeight = (ImageView) findViewById(R.id.lineWeight);
         lineWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                surface.setErased(erased);
                 new DialogBoxLineWeight(surface);
             }
         });
@@ -88,11 +129,17 @@ public class MainActivity extends AppCompatActivity {
         eraser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                surface.setObjectType(CanvasableObject.ObjectType.RECTANGLE);
+                erased = !erased;
+                surface.setObjectType(CanvasableObject.ObjectType.LINE);
+                surface.setErased(erased);
                 int color =((ColorDrawable)surface.getBackground()).getColor();
-                SerializablePaint paint = surface.getPaint();
-                paint.setColor(color);
-                surface.setPaint(paint);
+                Paint backgroundcolor = surface.getPaint();
+                backgroundcolor.setColor(color);
+                if(erased) {
+                    colorChart.setVisibility(View.GONE);
+                }else {
+                    colorChart.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -117,11 +164,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     //Override for onSavedInstanceState. This override saves the surface when the screen is rotated.
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.i("==================", "In onSavedInstanceState");
         outState.putSerializable(SURFACE, (DrawingSurface) findViewById(R.id.canvas));
         super.onSaveInstanceState(outState);
     }
@@ -130,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
     private class CanvasTouchListener implements View.OnTouchListener {
         //Startpoint is where the user clicks initially.
         //Endpoint is where the user releases their click or where the cursor is for ACTION_MOVE.
-        private SerializablePoint startPoint;
-        private SerializablePoint endPoint;
+        private Point startPoint;
+        private Point endPoint;
         DrawingSurface surface;
 
         //Default constructor saves the surface to the object for later use.
@@ -142,14 +187,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            Log.i("=======", "Touch Registered");
+//            Log.i("=======", "Touch Registered");
 
             //Clears points and gets starting point.
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 startPoint = null;
                 endPoint = null;
-                startPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
-                Log.i("=======", "Touch DOWN");
+                startPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
+//                Log.i("=======", "Touch DOWN");
                 return true;
             }
             //Gets ending Point and adds the object unless user is panning.
@@ -170,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 if(surface.getObjectType() != CanvasableObject.ObjectType.PAN) {
                     updateLine(motionEvent);
                 } else {
-                    SerializablePoint offset = calculateOffset(motionEvent);
+                    Point offset = calculateOffset(motionEvent);
                     startPoint.x += offset.x;
                     startPoint.y += offset.y;
                 }
@@ -184,14 +229,14 @@ public class MainActivity extends AppCompatActivity {
             if(endPoint != null){
                 surface.removePrevious();
             }
-            endPoint = new SerializablePoint((int) motionEvent.getX(), (int) motionEvent.getY());
+            endPoint = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
             surface.add(startPoint, endPoint);
         }
 
         //Calculates the offset for pannings
         @NonNull
-        private SerializablePoint calculateOffset(MotionEvent motionEvent) {
-            SerializablePoint offset = new SerializablePoint(0,0);
+        private Point calculateOffset(MotionEvent motionEvent) {
+            Point offset = new Point(0,0);
             offset.x = (int) motionEvent.getX() - startPoint.x;
             offset.y = (int) motionEvent.getY() - startPoint.y;
             surface.addOffset(offset);

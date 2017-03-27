@@ -1,8 +1,7 @@
 package edu.apsu.csci.teamaz.azpaint;
 
 import android.graphics.Paint;
-
-import java.io.Serializable;
+import android.graphics.Point;
 
 import java.io.Serializable;
 
@@ -11,19 +10,28 @@ import java.io.Serializable;
   */
 
 public class CanvasableObject implements Serializable{
+    public boolean isErased() {
+        return erased;
+    }
+
+    public void setErased(boolean erased) {
+        this.erased = erased;
+    }
+
     //Specifies the type of object to be drawn when the use clicks or in the case of pan it specifies
     //that the screen needs to be panned instead of drawing a new object.
     public enum ObjectType implements Serializable {PAN, LINE, RECTANGLE};
 
     //Paint, start and end points, and an objectType enum for the current object.
-    private SerializablePaint paint;
-    private SerializablePoint startPoint;
-    private SerializablePoint endPoint;
+    private Paint paint;
+    private Point startPoint;
+    private Point endPoint;
     private ObjectType type;
+    private boolean erased;
 
     //Constructor
-    public CanvasableObject(Paint paint, SerializablePoint startPoint, SerializablePoint endPoint, ObjectType type) {
-        this.paint = new SerializablePaint();
+    public CanvasableObject(Paint paint, Point startPoint, Point endPoint, ObjectType type, boolean Erased) {
+        this.paint = new Paint();
         this.paint.setStyle(paint.getStyle());
         this.paint.setStrokeWidth(paint.getStrokeWidth());
         this.paint.setColor(paint.getColor());
@@ -31,6 +39,7 @@ public class CanvasableObject implements Serializable{
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.type = type;
+        this.erased = Erased;
     }
 
     //Getters and Setters
@@ -38,23 +47,23 @@ public class CanvasableObject implements Serializable{
         return paint;
     }
 
-    public void setPaint(SerializablePaint paint) {
+    public void setPaint(Paint paint) {
         this.paint = paint;
     }
 
-    public SerializablePoint getStartPoint() {
+    public Point getStartPoint() {
         return startPoint;
     }
 
-    public void setStartPoint(SerializablePoint startPoint) {
+    public void setStartPoint(Point startPoint) {
         this.startPoint = startPoint;
     }
 
-    public SerializablePoint getEndPoint() {
+    public Point getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(SerializablePoint endPoint) {
+    public void setEndPoint(Point endPoint) {
         this.endPoint = endPoint;
     }
 

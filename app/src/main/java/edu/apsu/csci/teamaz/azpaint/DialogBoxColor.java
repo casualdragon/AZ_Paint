@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,11 +17,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by nonam on 3/25/2017.
+ * This class used to create and display the dialog to select a color.
+ * The color picker allows the user to select what color to draw and
+ * allows the user to set the selected color as the background.
+ *
  */
 
 public class DialogBoxColor {
-    private final SerializablePaint paint;
+    private final Paint paint;
 
     public DialogBoxColor(final DrawingSurface surface){
         paint = surface.getPaint();
@@ -44,30 +48,30 @@ public class DialogBoxColor {
         final EditText greenEditText = (EditText) dialog.findViewById(R.id.green);
         final EditText blueEditText = (EditText) dialog.findViewById(R.id.blue);
 
-        redEditText.addTextChangedListener(new textWatcher(Color.red(paint.getColor())));
-        greenEditText.addTextChangedListener(new textWatcher(Color.green(paint.getColor())));
-        blueEditText.addTextChangedListener(new textWatcher(Color.blue(paint.getColor())));
-
         redEditText.setText(Integer.toString(Color.red(paint.getColor())));
         greenEditText.setText(Integer.toString(Color.green(paint.getColor())));
         blueEditText.setText(Integer.toString(Color.blue(paint.getColor())));
 
+        //The ontouch event allows us to get the selected color from the exact place the user
+        //selected
         colorchart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-
                 if(MotionEvent.ACTION_DOWN == motionEvent.getAction()) {
                     int x = (int) motionEvent.getX();
                     int y = (int) motionEvent.getY();
 
-                    Log.i("============", "x: " + x + " y: " + y);
+                    //Used for debugging purposes
+                    //Log.i("============", "x: " + x + " y: " + y);
 
                     TextView colorDisplay = (TextView) dialog.findViewById(R.id.colorDisplay);
 
+                    //This adjust the touched x and y value due to scaling issues
                     int convertedX = (int)((double) x / colorchart.getWidth() * bitmap.getWidth());
                     int convertedY = (int)((double) y / colorchart.getHeight() * bitmap.getHeight());
 
-                    Log.i("============", "cx: " + convertedX + " cy: " + convertedY);
+                    //Used for debugging purposes
+                    //Log.i("============", "cx: " + convertedX + " cy: " + convertedY);
 
                     int pixel = bitmap.getPixel(convertedX, convertedY);
 
@@ -75,6 +79,7 @@ public class DialogBoxColor {
                     int blue = Color.blue(pixel);
                     int green = Color.green(pixel);
 
+                    //This displays the selected int values of the color by the color's rgb values
                     redEditText.setText(Integer.toString(red));
                     blueEditText.setText(Integer.toString(blue));
                     greenEditText.setText(Integer.toString(green));
@@ -98,7 +103,12 @@ public class DialogBoxColor {
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //This sets the background color of the surface view
+                //and sets the int backgroundcolor in the surface view,
+                //which the int backgroundcolor is used for saving the value for the rotations
                 surface.setBackgroundColor(paint.getColor());
+                surface.setBackgroundcolor(paint.getColor());
+                surface.updatedEraserObjects();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -108,28 +118,5 @@ public class DialogBoxColor {
             }
         });
 
-    }
-
-    private class textWatcher implements TextWatcher{
-
-        private int color;
-        textWatcher(int color){
-            this.color = color;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
     }
 }

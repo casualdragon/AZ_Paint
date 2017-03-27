@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -19,9 +19,11 @@ public class DrawingSurface extends View implements Serializable{
     //List of objects that are drawn, the current paint, the offset for panning and the current
     //type of object being drawn.
     private ArrayList<CanvasableObject> objects;
-    private SerializablePaint paint;
-    private SerializablePoint offset;
+    private Paint paint;
+    private Point offset;
     private CanvasableObject.ObjectType objectType;
+    private int backgroundcolor;
+    private boolean erased;
 
     //Constructors
     public DrawingSurface(Context context) {
@@ -43,13 +45,13 @@ public class DrawingSurface extends View implements Serializable{
     private void setup(AttributeSet attrs){
         objects = new ArrayList<>();
         objectType = CanvasableObject.ObjectType.LINE;
-        offset = new SerializablePoint(0,0);
-
-        paint = new SerializablePaint();
+        offset = new Point(0,0);
+        erased = false;
+        paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setStrokeWidth(10f);
-        //do something
+        backgroundcolor = 0xffffffff;
     }
 
     //SetSettings is a copy method for this object that copies the settings from another of the same
@@ -59,6 +61,8 @@ public class DrawingSurface extends View implements Serializable{
         this.objectType = surface.objectType;
         this.objects = surface.objects;
         this.offset = surface.offset;
+        this.backgroundcolor = surface.backgroundcolor;
+        this.erased = surface.erased;
         invalidate();
     }
 
@@ -94,28 +98,29 @@ public class DrawingSurface extends View implements Serializable{
 
     //Add creates and adds a new object based on the current objectType and the points passed to the
     //method.
-    public void add(SerializablePoint start, SerializablePoint end){
+    public void add(Point start, Point end){
         //adds object with current settings
-        Log.i("=================", "adding object");
-        Log.i("======", "" + offset.x+ " | " + offset.y );
+//        Log.i("=================", "adding object");
+//        Log.i("======", "" + offset.x+ " | " + offset.y );
 
         objects.add(new CanvasableObject(
                 paint,
-                new SerializablePoint(start.x - offset.x , start.y -offset.y ),
-                new SerializablePoint(end.x - offset.x , end.y -offset.y ),
-                objectType));
+                new Point(start.x - offset.x , start.y -offset.y ),
+                new Point(end.x - offset.x , end.y -offset.y ),
+                objectType, erased));
 
         invalidate();
     }
 
     //RemovePrevious removes the last object from the objects method. This is primarily used for
-    //refreshing the shape as the user moves their cursor.
+    //refreshing the shape as the user moves their cursor. In addition, this method is also used
+    //with the undo imageView onClick event.
     public void removePrevious(){
         if(!objects.isEmpty()) {
-            Log.i("====================", "Removing last object");
+//            Log.i("====================", "Removing last object");
 
             for(int i = 0; i < objects.size(); i++){
-                Log.i("==================", "object "+ objects.get(i).toString());
+//                Log.i("==================", "object "+ objects.get(i).toString());
             }
 
             objects.remove(objects.size() - 1);
@@ -126,7 +131,7 @@ public class DrawingSurface extends View implements Serializable{
 
     //The addOffset method adds the values of point to the offset point. This is primarily used for
     //panning and drawing objects after panning.
-    public void addOffset(SerializablePoint point){
+    public void addOffset(Point point){
         this.offset.x += point.x;
         this.offset.y += point.y;
         invalidate();
@@ -137,8 +142,20 @@ public class DrawingSurface extends View implements Serializable{
         objects.clear();
     }
 
+    //Updates objects to the current backgroundcolor if erased is true
+    public void updatedEraserObjects(){
+        for (CanvasableObject object : objects){
+            if(object.isErased()){
+                Paint paint = object.getPaint();
+                paint.setColor(backgroundcolor);
+                object.setPaint(paint);
+            }
+        }
+        invalidate();
+    }
+
     //Getters and setters.
-    public SerializablePaint getPaint(){
+    public Paint getPaint(){
         return paint;
     }
 
@@ -150,7 +167,7 @@ public class DrawingSurface extends View implements Serializable{
         return objects;
     }
 
-    public void setPaint(SerializablePaint paint){
+    public void setPaint(Paint paint){
         this.paint = paint;
     }
 
@@ -163,9 +180,19 @@ public class DrawingSurface extends View implements Serializable{
     }
 
 
+    public int getBackgroundcolor() {
+        return backgroundcolor;
+    }
 
+    public void setBackgroundcolor(int backgroundcolor) {
+        this.backgroundcolor = backgroundcolor;
+    }
 
+    public boolean isErased() {
+        return erased;
+    }
 
-
-
+    public void setErased(boolean erased) {
+        this.erased = erased;
+    }
 }
