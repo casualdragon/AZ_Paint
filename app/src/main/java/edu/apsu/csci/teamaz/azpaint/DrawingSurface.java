@@ -122,6 +122,7 @@ public class DrawingSurface extends View implements Serializable{
             for(int i = 0; i < objects.size(); i++){
 //                Log.i("==================", "object "+ objects.get(i).toString());
             }
+
             objects.remove(objects.size() - 1);
             invalidate();
         }
