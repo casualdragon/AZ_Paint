@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +26,8 @@ public class DialogBoxColor {
 
     public DialogBoxColor(final DrawingSurface surface){
         paint = surface.getPaint();
+
+        Log.i("=====================", "ColorPickerPaint: " +Integer.toString(paint.getColor()));
 
         Context context = surface.getContext();
 

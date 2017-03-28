@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class DrawingSurface extends View implements Serializable{
     private Point offset;
     private CanvasableObject.ObjectType objectType;
     private int backgroundcolor;
+    private int previousColor;
     private boolean erased;
 
     //Constructors
@@ -169,6 +171,7 @@ public class DrawingSurface extends View implements Serializable{
 
     public void setPaint(Paint paint){
         this.paint = paint;
+        Log.i("=================", "setPintColor: " +  Integer.toString(paint.getColor()));
     }
 
     public void setObjectType(CanvasableObject.ObjectType objectType){
@@ -194,5 +197,13 @@ public class DrawingSurface extends View implements Serializable{
 
     public void setErased(boolean erased) {
         this.erased = erased;
+    }
+
+    public int getPreviousColor() {
+        return previousColor;
+    }
+
+    public void setPreviousColor(int previousColor) {
+        this.previousColor = previousColor;
     }
 }

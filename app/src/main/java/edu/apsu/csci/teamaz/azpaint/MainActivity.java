@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
         colorChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                erased = false;
-                surface.setErased(erased);
                 new DialogBoxColor(surface);
             }
         });
@@ -130,16 +128,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 erased = !erased;
-                surface.setObjectType(CanvasableObject.ObjectType.LINE);
                 surface.setErased(erased);
-                int color =((ColorDrawable)surface.getBackground()).getColor();
-                Paint backgroundcolor = surface.getPaint();
-                backgroundcolor.setColor(color);
+                int color;
                 if(erased) {
-                    colorChart.setVisibility(View.GONE);
+                    colorChart.setEnabled(false);
+                    surface.setPreviousColor(surface.getPaint().getColor());
+                    color =((ColorDrawable)surface.getBackground()).getColor();
+
                 }else {
-                    colorChart.setVisibility(View.VISIBLE);
+                    colorChart.setEnabled(true);
+                    color = surface.getPreviousColor();
                 }
+                Paint backgroundcolor = surface.getPaint();
+                Log.i("==================", "SurfacePaint:" + Integer.toString(surface.getPaint().getColor()));
+                backgroundcolor.setColor(color);
+                Log.i("=================", "Background paint: :" + Integer.toString(backgroundcolor.getColor()));
             }
         });
 
