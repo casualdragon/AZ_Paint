@@ -44,41 +44,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:ems="10"
                 android:id="@+id/red"
                 android:layout_weight="1"
                 android:hint="Red"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="20dp"/>
 
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:ems="10"
                 android:id="@+id/green"
                 android:layout_weight="1"
                 android:hint="Green"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="20dp"/>
 
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:ems="10"
                 android:id="@+id/blue"
                 android:layout_weight="1"
                 android:hint="Blue"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="20dp"/>
         </LinearLayout>
 
         <Button
