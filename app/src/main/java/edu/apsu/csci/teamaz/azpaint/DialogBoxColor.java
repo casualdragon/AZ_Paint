@@ -44,9 +44,9 @@ public class DialogBoxColor {
         final ImageView colorchart =(ImageView)dialog.findViewById(R.id.colorchart);
         final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.colorchart);
 
-        final EditText redEditText = (EditText) dialog.findViewById(R.id.red);
-        final EditText greenEditText = (EditText) dialog.findViewById(R.id.green);
-        final EditText blueEditText = (EditText) dialog.findViewById(R.id.blue);
+        final TextView redEditText = (TextView) dialog.findViewById(R.id.red);
+        final TextView greenEditText = (TextView) dialog.findViewById(R.id.green);
+        final TextView blueEditText = (TextView) dialog.findViewById(R.id.blue);
 
         redEditText.setText(Integer.toString(Color.red(paint.getColor())));
         greenEditText.setText(Integer.toString(Color.green(paint.getColor())));
